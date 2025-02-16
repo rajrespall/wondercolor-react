@@ -77,20 +77,28 @@ function App() {
     <div className="app-container">
       <aside className="sidebar">
         <h2>Tools</h2>
-        <ImageSelector 
-          selectedImage={selectedImage}
-          onImageSelect={setSelectedImage}
-        />
-        <ColorPalette 
-          selectedColor={selectedColor} 
-          onColorSelect={setSelectedColor} 
-        />
-        <button className="save-button" onClick={handleSave}>
-          Save Image
-        </button>
-        <button className="clear-button" onClick={handleClear}>
-          Clear Grid
-        </button>
+        <div className="tools-container">
+          <div className="tools-left">
+            <ImageSelector 
+              selectedImage={selectedImage}
+              onImageSelect={setSelectedImage}
+            />
+          </div>
+          <div className="tools-right">
+            <ColorPalette 
+              selectedColor={selectedColor} 
+              onColorSelect={setSelectedColor} 
+            />
+          </div>
+        </div>
+        <div className="button-container">
+          <button className="save-button" onClick={handleSave}>
+            Save Image
+          </button>
+          <button className="clear-button" onClick={handleClear}>
+            Clear Grid
+          </button>
+        </div>
       </aside>
       <main className="main-content">
         <ColoringGrid 
