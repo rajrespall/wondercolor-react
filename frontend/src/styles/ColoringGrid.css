@@ -1,0 +1,54 @@
+.coloring-grid {
+  position: relative;
+  border: 4px solid #333;
+  display: inline-block;
+  background: transparent;
+  padding: 1rem;
+  box-shadow: 8px 8px 0 #e0e0e0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  z-index: 1;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.grid-cell:hover {
+  transform: scale(1.1);
+  z-index: 2;
+}
+  
+@media (max-width: 768px) {
+  .grid-cell {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.coloring-grid-container {
+  position: relative;
+  display: inline-block;
+}
+
+.background-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2rem);  /* Account for padding */
+  height: calc(100% - 2rem);
+  object-fit: contain;
+  opacity: 0.3;
+  pointer-events: none;
+}
