@@ -1,9 +1,8 @@
 import { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import owlImage from '../assets/owl_bw.jpg'
 import '../styles/ColoringGrid.css'
 
-function ColoringGrid({ selectedColor, grid, setGrid }) {
+function ColoringGrid({ selectedColor, grid, setGrid, backgroundImage }) {
   const [isDrawing, setIsDrawing] = useState(false)
 
   const handleCellColor = useCallback((rowIndex, colIndex) => {
@@ -31,7 +30,13 @@ function ColoringGrid({ selectedColor, grid, setGrid }) {
 
   return (
     <div className="coloring-grid-container">
-      <img src={owlImage} alt="Owl outline" className="background-image" />
+      {backgroundImage && (
+        <img 
+          src={backgroundImage} 
+          alt="Background template" 
+          className="background-image" 
+        />
+      )}
       <div 
         className="coloring-grid"
         onMouseLeave={handleMouseUp}
@@ -58,7 +63,8 @@ function ColoringGrid({ selectedColor, grid, setGrid }) {
 ColoringGrid.propTypes = {
   selectedColor: PropTypes.string.isRequired,
   grid: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  setGrid: PropTypes.func.isRequired
+  setGrid: PropTypes.func.isRequired,
+  backgroundImage: PropTypes.string
 }
 
 export default ColoringGrid

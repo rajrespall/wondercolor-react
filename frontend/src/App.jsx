@@ -3,11 +3,13 @@ import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast'
 import ColorPalette from './components/ColorPalette'
 import ColoringGrid from './components/ColoringGrid'
+import ImageSelector from './components/ImageSelector'
 import { uploadImage } from './utils/api'
 import './styles/App.css'
 
 function App() {
   const [selectedColor, setSelectedColor] = useState('#000000')
+  const [selectedImage, setSelectedImage] = useState('')
   const [grid, setGrid] = useState(Array(32).fill().map(() => Array(32).fill('transparent')))
 
   const handleClear = () => {
@@ -75,6 +77,10 @@ function App() {
     <div className="app-container">
       <aside className="sidebar">
         <h2>Tools</h2>
+        <ImageSelector 
+          selectedImage={selectedImage}
+          onImageSelect={setSelectedImage}
+        />
         <ColorPalette 
           selectedColor={selectedColor} 
           onColorSelect={setSelectedColor} 
@@ -91,6 +97,7 @@ function App() {
           selectedColor={selectedColor} 
           grid={grid}
           setGrid={setGrid}
+          backgroundImage={selectedImage} 
         />
       </main>
       <Toaster 
