@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Grid } from '@mui/material';
+import React, { useState, useCallback } from 'react';
+import { Box, Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import bg from './assets/bg.png';
 import board from './assets/board.png';
 import logo from './assets/logo_w.png';
@@ -42,6 +42,8 @@ const App = () => {
   const [isEraser, setIsEraser] = useState(false);
   const [boardRef, setBoardRef] = useState(null);
   const [selectedGuideId, setSelectedGuideId] = useState(1);
+  const [clearDialogOpen, setClearDialogOpen] = useState(false);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const paletteGroups = [paletteGroup1, paletteGroup2, paletteGroup3];
 
   const selectedGuide = guideImages.find(guide => guide.id === selectedGuideId);
@@ -53,7 +55,7 @@ const App = () => {
   const handleColorSelect = (palette) => {
     const colorCode = palette.split('/').pop().split('.')[0];
     setSelectedColor(`#${colorCode}`);
-    setIsEraser(false); // Switch back to drawing mode when color is selected
+    setIsEraser(false);
   };
 
   const handleBrushSizeChange = (event, newValue) => {
@@ -64,22 +66,37 @@ const App = () => {
     setIsEraser(!isEraser);
   };
 
-  const handleBoardRef = (ref) => {
+  const handleBoardRef = useCallback((ref) => {
     setBoardRef(ref);
-  };
+  }, []);
 
   const handleClear = () => {
+    setClearDialogOpen(true);
+  };
+
+  const confirmClear = () => {
     if (boardRef && boardRef.clearCanvas) {
       boardRef.clearCanvas();
     }
+    setClearDialogOpen(false);
   };
 
-  const handleImageSelect = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
-    }
+  const cancelClear = () => {
+    setClearDialogOpen(false);
+  };
+
+  // Add save dialog handlers
+  const handleSaveRequest = () => {
+    setSaveDialogOpen(true);
+  };
+
+  const confirmSave = () => {
+    setSaveDialogOpen(false);
+    // We'll pass this to the ControlPanel to execute the actual save
+  };
+
+  const cancelSave = () => {
+    setSaveDialogOpen(false);
   };
 
    return (
@@ -117,11 +134,60 @@ const App = () => {
           onEraser={toggleEraser}
           isEraser={isEraser}
           onClear={handleClear}
+          onSave={handleSaveRequest}
+          confirmSave={confirmSave}
+          saveDialogOpen={saveDialogOpen}
           guideImage={selectedGuide?.color}
           onGuideSelect={handleGuideSelect}
           selectedGuideId={selectedGuideId}
         />
       </Grid>
+
+      {/* Clear Confirmation Dialog */}
+      <Dialog
+        open={clearDialogOpen}
+        onClose={cancelClear}
+        aria-labelledby="clear-dialog-title"
+        aria-describedby="clear-dialog-description"
+      >
+        <DialogTitle id="clear-dialog-title">
+          {"Clear Canvas?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="clear-dialog-description">
+            Are you sure you want to clear the canvas? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelClear} color="primary">Cancel</Button>
+          <Button onClick={confirmClear} color="error" autoFocus>
+            Clear
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Save Confirmation Dialog */}
+      <Dialog
+        open={saveDialogOpen}
+        onClose={cancelSave}
+        aria-labelledby="save-dialog-title"
+        aria-describedby="save-dialog-description"
+      >
+        <DialogTitle id="save-dialog-title">
+          {"Save Drawing?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="save-dialog-description">
+            Are you sure you want to save your drawing? This will upload it to the gallery.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelSave} color="primary">Cancel</Button>
+          <Button onClick={confirmSave} color="success" autoFocus>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

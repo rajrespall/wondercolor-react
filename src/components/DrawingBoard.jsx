@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Grid } from '@mui/material';
 
 const DrawingBoard = ({ selectedColor, board, brushSize, isEraser, onRef, grayscaleImage }) => {
@@ -37,15 +37,15 @@ const DrawingBoard = ({ selectedColor, board, brushSize, isEraser, onRef, graysc
       // Load grayscale image after background
       grayImageObj.onload = () => {
         setGrayImage(grayImageObj);
-        const scale = 0.6;
-        const width = 600;
-        const height = 600;
+        const scale = 2.0;
+        const width = 1330.33;
+        const height = 800;
         const x = (canvas.width - width) / 2;
-        const y = 35;
+        const y = -40;
 
 
         // Set opacity for grayscale image
-        ctx.globalAlpha = 0.3; // Adjust this value between 0 and 1
+        ctx.globalAlpha = 0.5; // Adjust this value between 0 and 1
         ctx.drawImage(grayImageObj, x, y, width, height);
         ctx.globalAlpha = 1.0; // Reset opacity
       };
@@ -65,13 +65,13 @@ const DrawingBoard = ({ selectedColor, board, brushSize, isEraser, onRef, graysc
     // Draw grayscale image
     if (grayImage) {
       const scale = 0.6;
-      const width = 600;
-      const height = 600;
+      const width = 1330.33;
+      const height = 800;
       const x = (canvasRef.current.width - width) / 2;
-      const y = 35;
+      const y = -40;
       
 
-      context.globalAlpha = 0.3; // Set opacity for grayscale image
+      context.globalAlpha = 0.5; // Set opacity for grayscale image
       context.drawImage(grayImage, x, y, width, height);
       context.globalAlpha = 1.0; // Reset opacity
     }
@@ -114,12 +114,30 @@ const DrawingBoard = ({ selectedColor, board, brushSize, isEraser, onRef, graysc
     setIsDrawing(false);
   };
 
-  const clearCanvas = () => {
+  const clearCanvas = useCallback(() => {
     if (drawLayer) {
       drawLayer.clearRect(0, 0, drawLayer.canvas.width, drawLayer.canvas.height);
-      redrawCanvas();
+      
+      // Make sure redrawCanvas is called with the current state
+      if (context && backgroundImage) {
+        // Clear and draw background
+        context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        context.drawImage(backgroundImage, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        
+        // Draw grayscale image
+        if (grayImage) {
+          const width = 1333.33;
+          const height = 800;
+          const x = (canvasRef.current.width - width) / 2;
+          const y = -40;
+
+          context.globalAlpha = 0.5; // Set opacity for grayscale image
+          context.drawImage(grayImage, x, y, width, height);
+          context.globalAlpha = 1.0; // Reset opacity
+        }
+      }
     }
-  };
+  }, [drawLayer, context, backgroundImage, grayImage]);
 
   useEffect(() => {
     if (drawLayer) {
@@ -139,7 +157,7 @@ const DrawingBoard = ({ selectedColor, board, brushSize, isEraser, onRef, graysc
     if (onRef) {
       onRef({ clearCanvas });
     }
-  }, [onRef]);
+  }, [clearCanvas, onRef]);
 
   return (
     <Grid 
