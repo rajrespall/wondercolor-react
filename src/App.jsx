@@ -3,7 +3,10 @@ import { Box, Grid, Dialog, DialogActions, DialogContent, DialogContentText, Dia
 import bg from './assets/bg.png';
 import board from './assets/board.png';
 import logo from './assets/logo_w.png';
+
+import bgMusic from './assets/bg-music.mp3'
 import PaletteContainer from './components/PaletteContainer';
+import BackgroundMusic from './components/BackgroundMusic';
 
 import palette1 from './assets/palette/01ffff.png';
 import palette2 from './assets/palette/4E3478.png';
@@ -99,7 +102,7 @@ const App = () => {
     setSaveDialogOpen(false);
   };
 
-   return (
+  return (
     <Box
       sx={{
         backgroundImage: `url(${bg})`,
@@ -128,19 +131,27 @@ const App = () => {
           onRef={handleBoardRef}
           grayscaleImage={selectedGuide?.gray}
         />
-        <ControlPanel 
-          brushSize={brushSize}
-          onBrushSizeChange={handleBrushSizeChange}
-          onEraser={toggleEraser}
-          isEraser={isEraser}
-          onClear={handleClear}
-          onSave={handleSaveRequest}
-          confirmSave={confirmSave}
-          saveDialogOpen={saveDialogOpen}
-          guideImage={selectedGuide?.color}
-          onGuideSelect={handleGuideSelect}
-          selectedGuideId={selectedGuideId}
-        />
+        <Grid item xs={2} sx={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center', 
+          alignItems: 'center'
+        }}>
+          <ControlPanel 
+            brushSize={brushSize}
+            onBrushSizeChange={handleBrushSizeChange}
+            onEraser={toggleEraser}
+            isEraser={isEraser}
+            onClear={handleClear}
+            onSave={handleSaveRequest}
+            confirmSave={confirmSave}
+            saveDialogOpen={saveDialogOpen}
+            guideImage={selectedGuide?.color}
+            onGuideSelect={handleGuideSelect}
+            selectedGuideId={selectedGuideId}
+          />
+          <BackgroundMusic audioSrc={bgMusic} />
+        </Grid>
       </Grid>
 
       {/* Clear Confirmation Dialog */}
