@@ -18,7 +18,7 @@ import palette7 from './assets/palette/8D4A6E.png';
 import palette8 from './assets/palette/8E8D54.png';
 import palette9 from './assets/palette/9E5430.png';
 import palette10 from './assets/palette/100f0d.png';
-import palette11 from './assets/palette/542A29.png';
+import palette11 from './assets/palette/FF0000.png';
 import palette12 from './assets/palette/6060A3.png';
 import palette13 from './assets/palette/afbda5.png';
 import palette14 from './assets/palette/c9c9c9.png';
